@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Check Your Result</h2>
+        <input type="text" id="studentID" placeholder="Enter Student ID" />
+        <button onclick="checkResult()">Check Result</button>
+        <p id="errorMessage" class="error">Student ID not found. Please try again.</p>
+        
+        <div id="resultContainer" class="result">
+            <h3>Student Result</h3>
+            <p id="studentName"></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTable"></tbody>
+            </table>
+            <button onclick="printResult()">Print</button>
+        </div>
+    </div>
+
+    <script>
+        function getGrade(score) {
+            if (score >= 85) return 'A';
+            if (score >= 70) return 'B';
+            if (score >= 50) return 'C';
+            return 'Fail';
+        }
+
+        function checkResult() {
+            var studentID = document.getElementById("studentID").value;
+            var errorMessage = document.getElementById("errorMessage");
+            var resultContainer = document.getElementById("resultContainer");
+            var resultTable = document.getElementById("resultTable");
+            var resultsDatabase = {
+                "A1B2C3": {name: "John Doe", scores: {Mathematics: 45, English: 90, Science: 88}},
+                "X7Y8Z9": {name: "Jane Smith", scores: {Mathematics: 75, English: 80, Science: 40}},
+                "L3M4N5": {name: "Michael Johnson", scores: {Mathematics: 88, English: 50, Science: 90}},
+                "P9Q8R7": {name: "Emily Davis", scores: {Mathematics: 30, English: 89, Science: 94}},
+                "D5E6F7": {name: "Daniel Brown", scores: {Mathematics: 79, English: 84, Science: 20}},
+                "G8H9I0": {name: "Olivia Wilson", scores: {Mathematics: 91, English: 92, Science: 95}},
+                "J3K4L5": {name: "Sophia Martinez", scores: {Mathematics: 87, English: 88, Science: 49}},
+                "M6N7O8": {name: "William Anderson", scores: {Mathematics: 85, English: 40, Science: 89}},
+                "P2Q3R4": {name: "Ava Thomas", scores: {Mathematics: 93, English: 35, Science: 97}},
+                "S5T6U7": {name: "James White", scores: {Mathematics: 82, English: 85, Science: 87}},
+                "V8W9X0": {name: "Isabella Harris", scores: {Mathematics: 90, English: 91, Science: 92}},
+                "Y1Z2A3": {name: "Ethan Clark", scores: {Mathematics: 45, English: 80, Science: 79}}
+            };
+            
+            if (resultsDatabase[studentID]) {
+                document.getElementById("studentName").innerText = "Name: " + resultsDatabase[studentID].name;
+                resultTable.innerHTML = "";
+                for (var subject in resultsDatabase[studentID].scores) {
+                    var score = resultsDatabase[studentID].scores[subject];
+                    var grade = getGrade(score);
+                    var row = `<tr><td>${subject}</td><td>${score}</td><td>${grade}</td></tr>`;
+                    resultTable.innerHTML += row;
+                }
+                resultContainer.style.display = "block";
+                errorMessage.style.display = "none";
+            } else {
+                resultContainer.style.display = "none";
+                errorMessage.style.display = "block";
+            }
+        }
+
+        function printResult() {
+            var printWindow = window.open('', '', 'width=800,height=600');
+            var resultContent = document.getElementById("resultContainer").innerHTML;
+            printWindow.document.write('<html><head><title>Print Result</title></head><body>');
+            printWindow.document.write(resultContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
