@@ -53,3 +53,7 @@ To prevent easy guessing, student IDs have been made more complex and unique.
 ## License
 
 This project is open-source and available for modifications and improvements.
+
+## Developer
+
+This application was developed by **Engr Don Uhana Iji**, the Director of Operations at **Progenics Engineering Limited**.
