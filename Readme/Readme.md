@@ -45,4 +45,4 @@ License
 This project is developed and maintained by Progenics Engineering Limited. All rights reserved.
 
 Contact
-For inquiries and customization, please contact Progenics Engineering Limited @ www.progenics-engineering
+For inquiries and customization, please contact Progenics Engineering Limited @ www.progenics-engineering.com
