@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Famous Star Institute Students Result Checker</title>
+    <title>Student Result Checker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
             border-radius: 10px;
             box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
         }
-        .result {
+        .result, .admin-panel {
             display: none;
             margin-top: 20px;
             padding: 10px;
@@ -57,10 +57,11 @@
         <h2>Check Your Result</h2>
         <input type="text" id="studentID" placeholder="Enter Student ID" />
         <button onclick="checkResult()">Check Result</button>
+        <button onclick="showAdminLogin()">Admin Login</button>
         <p id="errorMessage" class="error">Student ID not found. Please try again.</p>
         
         <div id="resultContainer" class="result">
-            <h3>Famous Star Institute First Semester Student Result</h3>
+            <h3>Student Result</h3>
             <p id="studentName"></p>
             <table>
                 <thead>
@@ -76,7 +77,30 @@
         </div>
     </div>
 
+    <div class="container admin-panel" id="adminPanel">
+        <h2>Admin Panel</h2>
+        <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+        <button onclick="adminLogin()">Login</button>
+        <p id="adminError" class="error">Incorrect Password</p>
+        <div id="adminData" style="display: none;">
+            <h3>Students Who Checked Results</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTable"></tbody>
+            </table>
+            <button onclick="printAdminData()">Print</button>
+        </div>
+    </div>
+
     <script>
+        let checkedStudents = [];
+        const adminPassword = "admin123"; 
+
         function getGrade(score) {
             if (score >= 85) return 'A';
             if (score >= 70) return 'B';
@@ -90,46 +114,55 @@
             var resultContainer = document.getElementById("resultContainer");
             var resultTable = document.getElementById("resultTable");
             var resultsDatabase = {
-                "A1B2C3": {name: "Don Uhana Iji", scores: {Mathematics: 45, English: 90, Science: 88}},
-                "X7Y8Z9": {name: "Baron Nelson", scores: {Mathematics: 75, English: 80, Science: 40}},
-                "L3M4N5": {name: "Michael Johnson", scores: {Mathematics: 88, English: 50, Science: 90}},
-                "P9Q8R7": {name: "Emily Davis", scores: {Mathematics: 30, English: 89, Science: 94}},
-                "D5E6F7": {name: "Daniel Brown", scores: {Mathematics: 79, English: 84, Science: 20}},
-                "G8H9I0": {name: "Stanley Ode Iji", scores: {Mathematics: 91, English: 92, Science: 95}},
-                "J3K4L5": {name: "Sophia Martinez", scores: {Mathematics: 87, English: 88, Science: 49}},
-                "M6N7O8": {name: "William Anderson", scores: {Mathematics: 85, English: 40, Science: 89}},
-                "P2Q3R4": {name: "Ava Thomas", scores: {Mathematics: 93, English: 35, Science: 97}},
-                "S5T6U7": {name: "James White", scores: {Mathematics: 82, English: 85, Science: 87}},
-                "V8W9X0": {name: "Isabella Harris", scores: {Mathematics: 90, English: 91, Science: 92}},
-                "Y1Z2A3": {name: "Ethan Clark", scores: {Mathematics: 45, English: 80, Science: 79}}
+                "A1B2C3": {name: "John Doe", scores: {Mathematics: 45, English: 90, Science: 88}},
+                "X7Y8Z9": {name: "Jane Smith", scores: {Mathematics: 75, English: 80, Science: 40}},
+                "M9N8O7": {name: "Chris Evans", scores: {Mathematics: 88, English: 65, Science: 72}},
+                "P5Q4R3": {name: "Emma Watson", scores: {Mathematics: 92, English: 78, Science: 85}},
+                "D1E2F3": {name: "Robert Brown", scores: {Mathematics: 81, English: 55, Science: 69}},
+                "G4H5I6": {name: "Lily Adams", scores: {Mathematics: 76, English: 82, Science: 58}},
+                "J7K8L9": {name: "James Bond", scores: {Mathematics: 59, English: 95, Science: 87}},
+                "O1P2Q3": {name: "Nancy Drew", scores: {Mathematics: 49, English: 60, Science: 45}}
             };
             
             if (resultsDatabase[studentID]) {
-                document.getElementById("studentName").innerText = "Name: " + resultsDatabase[studentID].name;
+                let student = resultsDatabase[studentID];
+                document.getElementById("studentName").innerText = "Name: " + student.name;
                 resultTable.innerHTML = "";
-                for (var subject in resultsDatabase[studentID].scores) {
-                    var score = resultsDatabase[studentID].scores[subject];
+                for (var subject in student.scores) {
+                    var score = student.scores[subject];
                     var grade = getGrade(score);
                     var row = `<tr><td>${subject}</td><td>${score}</td><td>${grade}</td></tr>`;
                     resultTable.innerHTML += row;
                 }
                 resultContainer.style.display = "block";
                 errorMessage.style.display = "none";
+                checkedStudents.push({name: student.name, id: studentID});
             } else {
                 resultContainer.style.display = "none";
                 errorMessage.style.display = "block";
             }
         }
 
-        function printResult() {
-            var printWindow = window.open('', '', 'width=800,height=600');
-            var resultContent = document.getElementById("resultContainer").innerHTML;
-            printWindow.document.write('<html><head><title>Print Result</title></head><body>');
-            printWindow.document.write(resultContent);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
+        function showAdminLogin() {
+            document.getElementById("adminPanel").style.display = "block";
+        }
+
+        function adminLogin() {
+            var password = document.getElementById("adminPassword").value;
+            if (password === adminPassword) {
+                document.getElementById("adminError").style.display = "none";
+                document.getElementById("adminData").style.display = "block";
+                var adminTable = document.getElementById("adminTable");
+                adminTable.innerHTML = "";
+                checkedStudents.forEach(student => {
+                    var row = `<tr><td>${student.name}</td><td>${student.id}</td></tr>`;
+                    adminTable.innerHTML += row;
+                });
+            } else {
+                document.getElementById("adminError").style.display = "block";
+            }
         }
     </script>
 </body>
 </html>
+

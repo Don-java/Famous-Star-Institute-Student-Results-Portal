@@ -1,59 +1,48 @@
-# Student Result Checker
+Overview
+The Student Result Checker Application is a web-based tool that allows students to check and print their results easily. It also includes an admin panel where administrators can view students who have checked their results and print the records. This project is a product of Progenics Engineering Limited, headed by Engr Don Uhan Iji, the Operations Manager.
 
-## Overview
+Features
+Student Result Checking: Students can enter their unique student ID to access their results.
 
-This project is a simple web-based student result checker that allows students to enter their unique student ID to retrieve their results. The results are displayed in a formatted table, including subject names, scores, and grades. The system also provides a print functionality for students to print their results.
+Grade Display: Scores are automatically converted into grades (A, B, C, Fail).
 
-## Features
+Printing Option: Students can print their results directly from the application.
 
-- User-friendly interface
-- Secure student ID input
-- Displays student name, subjects, scores, and grades
-- Error handling for invalid student IDs
-- Print functionality for result sheets
+Admin Panel: Admins can log in to view a list of students who have checked their results.
 
-## Technologies Used
+Admin Printing Option: Admins can print records of students who have accessed their results.
 
-- **HTML**: Structure of the web page
-- **CSS**: Styling for an aesthetically pleasing layout
-- **JavaScript**: Logic for handling student result retrieval and printing
+Error Handling: Displays an error message for incorrect student IDs.
 
-## How It Works
+Technologies Used
+HTML, CSS, JavaScript for frontend development
 
-1. The student enters their unique ID in the input field.
-2. The system checks if the ID exists in the predefined database.
-3. If the ID is found, the student's results are displayed in a table.
-4. If the ID is invalid, an error message appears.
-5. The student can click the "Print" button to print their result.
+Local JavaScript Object for result data storage
 
-## Grading System
+How to Use
+For Students:
+Enter your student ID in the input field.
 
-- **A**: 85 - 100
-- **B**: 70 - 84
-- **C**: 50 - 69
-- **Fail**: Below 50
+Click the "Check Result" button.
 
-## Student ID Security
+If the ID is correct, your results will be displayed in a table format.
 
-To prevent easy guessing, student IDs have been made more complex and unique.
+Click "Print" to print your result.
 
-## How to Run
+For Admins:
+Click the "Admin Login" button.
 
-1. Download or clone the project files.
-2. Open `index.html` in a web browser.
-3. Enter a valid student ID to check the results.
-4. Click "Print" to generate a print-friendly version.
+Enter the admin password.
 
-## Future Improvements
+Upon successful login, a list of students who have checked their results will be displayed.
 
-- Database integration for real-time student records
-- Authentication for added security
-- Export results as PDF or Excel
+Click "Print" to print the list.
 
-## License
+About Progenics Engineering Limited
+Progenics Engineering Limited is a leading technology solutions provider committed to delivering innovative and impactful projects. This student result checker is one of the many solutions designed to enhance efficiency in academic institutions. The project is led by Engr Don Uhan Iji, the Operations Manager of the company.
 
-This project is open-source and available for modifications and improvements.
+License
+This project is developed and maintained by Progenics Engineering Limited. All rights reserved.
 
-## Developer
-
-This application was developed by **Engr Don Uhana Iji**, the Director of Operations at **Progenics Engineering Limited**.
+Contact
+For inquiries and customization, please contact Progenics Engineering Limited @ www.progenics-engineering
