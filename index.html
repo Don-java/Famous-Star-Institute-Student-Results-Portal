@@ -50,6 +50,24 @@
             margin-top: 10px;
             cursor: pointer;
         }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableResult, #printableResult * {
+                visibility: visible;
+            }
+            #printableResult {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            button {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -61,19 +79,21 @@
         <p id="errorMessage" class="error">Student ID not found. Please try again.</p>
         
         <div id="resultContainer" class="result">
-            <h3>Student Result</h3>
-            <p id="studentName"></p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Score</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody id="resultTable"></tbody>
-            </table>
-            <button onclick="printResult()">Print</button>
+            <div id="printableResult">
+                <h3>Student Result</h3>
+                <p id="studentName"></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultTable"></tbody>
+                </table>
+            </div>
+            <button onclick="printResult()">Print Result</button>
         </div>
     </div>
 
@@ -102,10 +122,12 @@
         const adminPassword = "admin123"; 
 
         function getGrade(score) {
-            if (score >= 85) return 'A';
-            if (score >= 70) return 'B';
-            if (score >= 50) return 'C';
-            return 'Fail';
+            if (score >= 70 && score <= 100) return 'A';
+            if (score >= 60 && score <= 69) return 'B';
+            if (score >= 50 && score <= 59) return 'C';
+            if (score >= 45 && score <= 49) return 'D';
+            if (score >= 40 && score <= 44) return 'E';
+            return 'F';
         }
 
         function checkResult() {
@@ -114,24 +136,26 @@
             var resultContainer = document.getElementById("resultContainer");
             var resultTable = document.getElementById("resultTable");
             var resultsDatabase = {
-                "A1B2C3": {name: "Vincent Joshua", scores: {COM211: 45, COM213: 90,}},
-                "X7Y8Z9": {name: "Jane Smith", scores: {Mathematics: 75, English: 80, Science: 40}},
-                "M9N8O7": {name: "Chris Evans", scores: {Mathematics: 88, English: 65, Science: 72}},
-                "P5Q4R3": {name: "Emma Watson", scores: {Mathematics: 92, English: 78, Science: 85}},
-                "D1E2F3": {name: "Robert Brown", scores: {Mathematics: 81, English: 55, Science: 69}},
-                "G4H5I6": {name: "Lily Adams", scores: {Mathematics: 76, English: 82, Science: 58}},
-                "J7K8L9": {name: "James Bond", scores: {Mathematics: 59, English: 95, Science: 87}},
-                "O1P2Q3": {name: "Nancy Drew", scores: {Mathematics: 49, English: 60, Science: 45}}
+                "A1B2C3": {name: "FSIMT/ND/COM/016", scores: {COM_211: 76, COM_213: 88}},
+                "X7Y8Z9": {name: "FSIMT/ND/COM/017", scores: {COM_211: 45.5, COM_213: 55}},
+                "M9N8O7": {name: "FSIMT/ND/COM/019", scores: {COM_211: 44, COM_213: 40}},
+                "P5Q4R3": {name: "FSIMT/ND/COM/023", scores: {COM_211: 72, COM_213: 59}},
+                "D1E2F3": {name: "FSIMT/ND/COM/024", scores: {COM_211: 0, COM_213: 64}},
+                "G4H5I6": {name: "FSIMT/ND/COM/020", scores: {COM_211: 0, COM_213: 40}},
+                "J7K8L9": {name: "FSIMT/ND/COM/018", scores: {COM_211: 0, COM_213: 40}},
+                "O1P2Q3": {name: "FSIMT/ND/EEC/010", scores: {EEC_236: 55}},
+                "11R2QJ5": {name: "FSIMT/ND/EEC/011", scores: {EEC_236: 59}},
+                "O1V2W4": {name: "FSIMT/ND/EEC/010", scores: {EEC_236: 45}}
             };
             
             if (resultsDatabase[studentID]) {
                 let student = resultsDatabase[studentID];
                 document.getElementById("studentName").innerText = "Name: " + student.name;
                 resultTable.innerHTML = "";
-                for (var subject in student.scores) {
-                    var score = student.scores[subject];
+                for (var course in student.scores) {
+                    var score = student.scores[course];
                     var grade = getGrade(score);
-                    var row = `<tr><td>${subject}</td><td>${score}</td><td>${grade}</td></tr>`;
+                    var row = `<tr><td>${course}</td><td>${score}</td><td>${grade}</td></tr>`;
                     resultTable.innerHTML += row;
                 }
                 resultContainer.style.display = "block";
@@ -162,7 +186,14 @@
                 document.getElementById("adminError").style.display = "block";
             }
         }
+
+        function printResult() {
+            window.print();
+        }
+
+        function printAdminData() {
+            window.print();
+        }
     </script>
 </body>
 </html>
-
