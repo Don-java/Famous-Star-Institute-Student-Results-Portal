@@ -136,17 +136,13 @@
         <p><strong>Semester:</strong> <span id="resultSemester"></span></p>
         <table id="resultTable"></table>
       </div>
-      <button id="printButton" onclick="printResult()">Download as PDF</button>
+      <button id="printButton" onclick="printResult()">Print or Save as PDF</button>
     </div>
   </div>
-
-  <!-- PDF generator -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
     const securePins = ["ABC123", "XYZ456", "LMN789"];
     let pinDatabase = {};
-    let usedPins = {};
 
     const resultsDatabase = {
       "2025": {
@@ -196,6 +192,7 @@
       }
     };
 
+    // Initialize PIN data
     securePins.forEach(pin => {
       pinDatabase[pin] = {
         studentID: null,
@@ -284,13 +281,28 @@
     }
 
     function printResult() {
-      const element = document.getElementById("printableResult");
-      html2pdf().from(element).set({
-        margin: 1,
-        filename: 'student-result.pdf',
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      }).save();
+      const content = document.getElementById("printableResult").innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Student Result</title>
+            <style>
+              body { font-family: Arial; padding: 20px; }
+              table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 8px;
+                text-align: center;
+              }
+            </style>
+          </head>
+          <body>${content}</body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
     }
   </script>
 </body>
