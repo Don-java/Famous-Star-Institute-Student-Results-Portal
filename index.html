@@ -93,23 +93,6 @@
     #printButton {
       margin-top: 15px;
     }
-
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-
-      #printableResult, #printableResult * {
-        visibility: visible;
-      }
-
-      #printableResult {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -153,9 +136,12 @@
         <p><strong>Semester:</strong> <span id="resultSemester"></span></p>
         <table id="resultTable"></table>
       </div>
-      <button id="printButton" onclick="printResult()">Print Result</button>
+      <button id="printButton" onclick="printResult()">Download as PDF</button>
     </div>
   </div>
+
+  <!-- PDF generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
     const securePins = ["ABC123", "XYZ456", "LMN789"];
@@ -255,7 +241,6 @@
       }
 
       if (!pinData.studentID) {
-        // First time use
         pinData.studentID = studentID;
         pinData.lockedYear = year;
         pinData.lockedSemester = semester;
@@ -271,7 +256,6 @@
         }
       }
 
-      // Check if result exists
       if (
         !resultsDatabase[year] ||
         !resultsDatabase[year][semester] ||
@@ -281,7 +265,6 @@
         return;
       }
 
-      // Passed all checks
       pinData.usageCount++;
 
       const studentData = resultsDatabase[year][semester][studentID];
@@ -301,7 +284,13 @@
     }
 
     function printResult() {
-      window.print();
+      const element = document.getElementById("printableResult");
+      html2pdf().from(element).set({
+        margin: 1,
+        filename: 'student-result.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      }).save();
     }
   </script>
 </body>
