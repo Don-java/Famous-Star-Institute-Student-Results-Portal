@@ -154,7 +154,8 @@
               "COM102": "B",
               "MTH101": "A",
               "GST101": "C"
-            }
+            },
+            sgp: "4.20"
           },
           "COM5678": {
             name: "Linda James",
@@ -163,7 +164,8 @@
               "COM102": "A",
               "MTH101": "B",
               "GST101": "B"
-            }
+            },
+            sgp: "3.60"
           }
         },
         "second": {
@@ -174,7 +176,8 @@
               "COM202": "A",
               "MTH201": "A",
               "GST201": "B"
-            }
+            },
+            cgp: "4.05"
           }
         }
       },
@@ -186,13 +189,13 @@
               "COM301": "A",
               "MTH301": "B",
               "GST301": "A"
-            }
+            },
+            sgp: "4.50"
           }
         }
       }
     };
 
-    // Initialize PIN data
     securePins.forEach(pin => {
       pinDatabase[pin] = {
         studentID: null,
@@ -275,6 +278,15 @@
       for (let course in studentData.courses) {
         const grade = studentData.courses[course];
         resultTable.innerHTML += `<tr><td>${course}</td><td>${grade}</td></tr>`;
+      }
+
+      // Display SGP or CGP from backend if available
+      if (semester === "first") {
+        const sgp = studentData.sgp || "";
+        resultTable.innerHTML += `<tr><td><strong>SGP</strong></td><td>${sgp}</td></tr>`;
+      } else if (semester === "second") {
+        const cgp = studentData.cgp || "";
+        resultTable.innerHTML += `<tr><td><strong>CGP</strong></td><td>${cgp}</td></tr>`;
       }
 
       resultContainer.style.display = "block";
